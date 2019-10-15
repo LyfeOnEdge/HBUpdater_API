@@ -102,10 +102,13 @@ def create_release(g_obj, file):
 	message = "this is repo version {}".format(tag)
 
 	release = repo.create_git_release(tag, timestamp, message, draft=False, prerelease=False, target_commitish="master")
+	print("Release created sucessfully")
 	release.upload_asset(file)
+	print("Print uploaded repo file sucessfully")
 
 with open(OAUTHFILE) as f:
 	oauth_token = f.read()
+	g = Github(oauth_token)
 
 if oauth_token:
 	webhandler.start(['Authorization', 'token %s' % oauth_token])
