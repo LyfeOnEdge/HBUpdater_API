@@ -135,4 +135,4 @@ try:
 		write_out("Sleeping {} minutes".format(SLEEP_INTERVAL))
 		sleep(60*SLEEP_INTERVAL)
 except Exception as e:
-	write_out(e)
+	write_out(str(e))
