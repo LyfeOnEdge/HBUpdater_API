@@ -11,13 +11,12 @@ OLDREPOFILENAME = "repos_old.json"
 OAUTHFILE = "oauth"
 SLEEP_INTERVAL = 30
 
-new_repo = os.path.join(sys.path[0], REPOFILENAME)
-old_repo = os.path.join(sys.path[0], OLDREPOFILENAME)
+wd = os.path.dirname(os.path.abspath(__file__))
+
+new_repo = os.path.join(wd, REPOFILENAME)
+old_repo = os.path.join(wd, OLDREPOFILENAME)
 
 repourl = "https://api.github.com/repos/LyfeOnEdge/HBUpdater_API"
-
-if not os.path.isdir("downloads"):
-	os.mkdir("downloads")
 
 if not os.path.isfile("log.txt"):
 	with open("log.txt", "w+") as log:

@@ -7,6 +7,9 @@ import urllib.request
 #Variable to map previously downloaded jsons to minimize repeated downloads
 filedict = {}
 
+if not os.path.isdir("downloads"):
+	os.mkdir("downloads")
+
 def start(header):
 	opener = urllib.request.build_opener()
 	opener.addheaders = [header, ('User-agent', 'Mozilla/5.0')]
