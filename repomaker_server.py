@@ -9,7 +9,7 @@ REPO_NAME = "HBUpdater_API"
 REPOFILENAME = "repos.json"
 OLDREPOFILENAME = "repos_old.json"
 OAUTHFILE = "oauth"
-SLEEP_INTERVAL = 120
+SLEEP_INTERVAL = 30
 
 new_repo = os.path.join(sys.path[0], REPOFILENAME)
 old_repo = os.path.join(sys.path[0], OLDREPOFILENAME)
@@ -104,7 +104,7 @@ def create_release(g_obj, file):
 	release = repo.create_git_release(tag, timestamp, message, draft=False, prerelease=False, target_commitish="master")
 	print("Release created sucessfully")
 	release.upload_asset(file)
-	print("Print uploaded repo file sucessfully")
+	print("uploaded repo file sucessfully")
 
 with open(OAUTHFILE) as f:
 	oauth_token = f.read()
