@@ -21,7 +21,7 @@ if not os.path.isdir("downloads"):
 
 if not os.path.isfile("log.txt"):
 	with open("log.txt", "w+") as log:
-		log.write("Made log at {}".format(datetime.today()))
+		log.write("Made log at {}".format(datetime.date.today()))
 
 def write_out(line):
 	with open("log.txt", "a+") as log:
