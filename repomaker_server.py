@@ -115,22 +115,25 @@ def create_release(g_obj, file):
 	release.upload_asset(file)
 	write_out("uploaded repo file sucessfully")
 
-with open(OAUTHFILE) as f:
-	oauth_token = f.read()
-	g = Github(oauth_token)
+try:
+	with open(OAUTHFILE) as f:
+		oauth_token = f.read()
+		g = Github(oauth_token)
 
-if oauth_token:
-	webhandler.start(['Authorization', 'token %s' % oauth_token])
-else:
-	sys.exit("No token")
-
-while True:
-	write_out("Making repo at {}".format(datetime.datetime.now()))
-	updated = make_repo()
-	if updated:
-		write_out("Data has changed.")
-		create_release(g, updated)
+	if oauth_token:
+		webhandler.start(['Authorization', 'token %s' % oauth_token])
 	else:
-		write_out("No data has changed.")
-	write_out("Sleeping {} minutes".format(SLEEP_INTERVAL))
-	sleep(60*SLEEP_INTERVAL)
+		sys.exit("No token")
+
+	while True:
+		write_out("Making repo at {}".format(datetime.datetime.now()))
+		updated = make_repo()
+		if updated:
+			write_out("Data has changed.")
+			create_release(g, updated)
+		else:
+			write_out("No data has changed.")
+		write_out("Sleeping {} minutes".format(SLEEP_INTERVAL))
+		sleep(60*SLEEP_INTERVAL)
+except Exception as e:
+	write_out(e)
