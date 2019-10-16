@@ -19,6 +19,15 @@ repourl = "https://api.github.com/repos/LyfeOnEdge/HBUpdater_API"
 if not os.path.isdir("downloads"):
 	os.mkdir("downloads")
 
+if not os.path.isfile("log.txt"):
+	with open("log.txt", "w+") as log:
+		log.write("Made log at {}".format(datetime.today()))
+
+def write_out(line):
+	with open("log.txt", "a+") as log:
+		log.write(line)
+	print(line)
+
 def make_repo():
 	new_dict = {
 		"homebrew" : repos.homebrewlist,
@@ -69,7 +78,7 @@ def get_downloads(software_item, json_data):
 			if asset:
 				ttl_dls += asset["download_count"]
 	except:
-		print("Error getting downloads for {}".format(software_item["name"]))
+		write_out("Error getting downloads for {}".format(software_item["name"]))
 	return ttl_dls
 
 #matching the pattern or none found
@@ -95,16 +104,16 @@ def create_release(g_obj, file):
 	most_recent_release = repo.get_latest_release().tag_name
 	most_recent_release = int(most_recent_release.strip("v"))
 	tag = ("v{}".format(most_recent_release + 1))
-	print(tag)
+	write_out(tag)
 	t = datetime.datetime.time(datetime.datetime.now())
 	timestamp = ("{} {}_{}_{}").format(datetime.date.today(), t.hour, t.minute, t.second) 
-	print(timestamp)
+	write_out(timestamp)
 	message = "this is repo version {}".format(tag)
 
 	release = repo.create_git_release(tag, timestamp, message, draft=False, prerelease=False, target_commitish="master")
-	print("Release created sucessfully")
+	write_out("Release created sucessfully")
 	release.upload_asset(file)
-	print("uploaded repo file sucessfully")
+	write_out("uploaded repo file sucessfully")
 
 with open(OAUTHFILE) as f:
 	oauth_token = f.read()
@@ -116,12 +125,12 @@ else:
 	sys.exit("No token")
 
 while True:
-	print("Making repo at {}".format(datetime.datetime.now()))
+	write_out("Making repo at {}".format(datetime.datetime.now()))
 	updated = make_repo()
 	if updated:
-		print("Data has changed.")
+		write_out("Data has changed.")
 		create_release(g, updated)
 	else:
-		print("No data has changed.")
-	print("Sleeping {} minutes".format(SLEEP_INTERVAL))
+		write_out("No data has changed.")
+	write_out("Sleeping {} minutes".format(SLEEP_INTERVAL))
 	sleep(60*SLEEP_INTERVAL)
