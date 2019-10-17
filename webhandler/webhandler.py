@@ -47,8 +47,17 @@ def download(fileURL):
 def getJson(softwarename, apiurl):
 	try:
 		jsonfile = os.path.join("downloads", softwarename + ".json")
-		jfile = accessETaggedFile(apiurl,jsonfile)
+		jfile, status = accessETaggedFile(apiurl,jsonfile)
 		return jfile
 	except Exception as e:
 		print("failed to download json file for {} - {}".format(softwarename, e))
 		return None
+
+def getupdatedJson(softwarename, apiurl):
+	try:
+		jsonfile = os.path.join("downloads", softwarename + ".json")
+		jfile, status = accessETaggedFile(apiurl,jsonfile)
+		return jfile, status
+	except Exception as e:
+		print("failed to download json file for {} - {}".format(softwarename, e))
+		return None, None

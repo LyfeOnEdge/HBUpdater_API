@@ -1,1 +1,1 @@
-from .webhandler import opentab, download, getJson, start, wait_for_connection
+from .webhandler import opentab, download, getJson, start, wait_for_connection, getupdatedJson

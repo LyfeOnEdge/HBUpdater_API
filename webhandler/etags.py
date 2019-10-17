@@ -30,15 +30,17 @@ def accessETaggedFile(url, file):
             newetag = headers["ETag"]
             setEtag(file,newetag)
         print("file {} - Updated".format(file))
+        status = True
     except urllib.error.URLError as e:
         if e.reason == "Not Modified": #304 error, what we want to see if nothing has been updated
             print("file {} - {}".format(file, e.reason))
+            status = False
         else:  
             print("etag download error - {} - {}\n\n".format(file, e.reason))
             print(headers)
-            return None
+            return None, None
 
-    return(file)
+    return file, status
 
 #tag is the file path associated with the etag
 #etag is tag obtained from last request

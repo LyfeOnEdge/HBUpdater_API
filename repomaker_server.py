@@ -42,11 +42,14 @@ def make_repo():
 		"payloads" : repos.payloadlist,
 	}
 
+	updated_packages = []
 	for genre in new_dict.keys():
 		for software_item in new_dict[genre]:
-			updatefile = webhandler.getJson(software_item["name"], software_item["githubapi"])
+			updatefile, status = webhandler.getupdatedJson(software_item["name"], software_item["githubapi"])
 			if not updatefile:
 				write_out("ERROR BUILDING REPO FILE: Failed to get json for {}".format(software_item["name"]))
+			if status:
+				updated_packages.append(software_item["name"])
 				
 			with open(updatefile, encoding = "utf-8") as update_file_object:
 				json_data = json.load(update_file_object)
@@ -87,7 +90,7 @@ def make_repo():
 
 	#if the repo has changed
 	if new_dict == old_dict:
-		return
+		return None, None
 	else:
 		#Make 1-instance backup for future checking
 		if os.path.isfile(new_repo):
@@ -99,7 +102,7 @@ def make_repo():
 		with open(REPOFILENAME, 'w+') as outfile:
 			json.dump(new_dict, outfile, indent=4)
 
-		return REPOFILENAME
+		return REPOFILENAME, updated_packages
 
 def get_downloads(software_item, json_data):
 	ttl_dls = 0
@@ -130,7 +133,7 @@ def findassetchunk(pattern, assets):
 					return asset
 
 
-def create_release(g_obj, file):
+def create_release(g_obj, file, updated_pkgs):
 	repo = g_obj.get_repo("{}/{}".format(REPO_AUTHOR,REPO_NAME))
 	most_recent_release = repo.get_latest_release().tag_name
 	most_recent_release = int(most_recent_release.strip("v"))
@@ -139,7 +142,7 @@ def create_release(g_obj, file):
 	t = datetime.datetime.time(datetime.datetime.now())
 	timestamp = ("{} {}_{}_{}").format(datetime.date.today(), t.hour, t.minute, t.second) 
 	write_out(timestamp)
-	message = "this is repo version {}".format(tag)
+	message = "this is repo version {}\nUpdated packages:\n{}".format(tag,json.dumps(updated_pkgs, indent = 4))
 
 	release = repo.create_git_release(tag, timestamp, message, draft=False, prerelease=False, target_commitish="master")
 	write_out("Release created sucessfully")
@@ -159,10 +162,11 @@ try:
 
 	while True:
 		write_out("Making repo at {}".format(datetime.datetime.now()))
-		updated = make_repo()
+		updated, updated_packages = make_repo()
 		if updated:
 			write_out("Data has changed.")
-			create_release(g, updated)
+			print(json.dumps(updated_packages, indent = 4))
+			create_release(g, updated, updated_packages)
 		else:
 			write_out("No data has changed.")
 		write_out("Sleeping {} minutes".format(SLEEP_INTERVAL))
