@@ -1,4 +1,4 @@
-import os
+import os, datetime
 
 if not os.path.isfile("log.txt"):
 	with open("log.txt", "w+") as log:
@@ -12,7 +12,6 @@ def write_out(line):
 try:
 	import json, shutil, sys, requests
 	from time import sleep
-	import datetime
 	import webhandler
 	import repos
 	from github import Github
