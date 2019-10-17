@@ -1,23 +1,3 @@
-import json, shutil, os, sys, requests
-from time import sleep
-import datetime
-import webhandler
-import repos
-from github import Github
-REPO_AUTHOR = "LyfeOnEdge"
-REPO_NAME = "HBUpdater_API"
-REPOFILENAME = "repos.json"
-OLDREPOFILENAME = "repos_old.json"
-OAUTHFILE = "oauth"
-SLEEP_INTERVAL = 30
-
-wd = os.path.dirname(os.path.abspath(__file__))
-
-new_repo = os.path.join(wd, REPOFILENAME)
-old_repo = os.path.join(wd, OLDREPOFILENAME)
-
-repourl = "https://api.github.com/repos/LyfeOnEdge/HBUpdater_API"
-
 if not os.path.isfile("log.txt"):
 	with open("log.txt", "w+") as log:
 		log.write("Made log at {}".format(datetime.date.today()))
@@ -26,6 +6,29 @@ def write_out(line):
 	with open("log.txt", "a+") as log:
 		log.write(line)
 	print(line)
+
+try:
+	import json, shutil, os, sys, requests
+	from time import sleep
+	import datetime
+	import webhandler
+	import repos
+	from github import Github
+	REPO_AUTHOR = "LyfeOnEdge"
+	REPO_NAME = "HBUpdater_API"
+	REPOFILENAME = "repos.json"
+	OLDREPOFILENAME = "repos_old.json"
+	OAUTHFILE = "oauth"
+	SLEEP_INTERVAL = 30
+
+	wd = os.path.dirname(os.path.abspath(__file__))
+
+	new_repo = os.path.join(wd, REPOFILENAME)
+	old_repo = os.path.join(wd, OLDREPOFILENAME)
+
+	repourl = "https://api.github.com/repos/LyfeOnEdge/HBUpdater_API"
+except Exception as e:
+	print(e)
 
 def make_repo():
 	new_dict = {
