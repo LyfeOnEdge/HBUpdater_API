@@ -2,7 +2,7 @@ import os, datetime
 
 if not os.path.isfile("log.txt"):
 	with open("log.txt", "w+") as log:
-		log.write("Made log at {}".format(datetime.date.today()))
+		log.write("Made log at {}\n".format(datetime.date.today()))
 
 def write_out(line):
 	with open("log.txt", "a+") as log:
