@@ -50,6 +50,33 @@ def make_repo():
 				
 			with open(updatefile, encoding = "utf-8") as update_file_object:
 				json_data = json.load(update_file_object)
+
+			#Prune json
+			for release in json_data:
+				release.pop('assets_url', None)
+				release.pop('name', None)
+				release.pop('url', None)
+				release.pop('target_commitish', None)
+				release.pop('upload_url', None)
+				release.pop('tarball_url', None)
+				release.pop('html_url', None)
+				release.pop('zipball_url', None)
+				release.pop('node_id', None)
+				release.pop('draft', None)
+				release.pop('id', None)
+				release.pop('prerelease', None)
+				release.pop('author', None)
+				assets = release["assets"]
+				if assets:
+					for asset in assets:
+						asset.pop('uploader', None)
+						asset.pop('node_id', None)
+						asset.pop('id', None)
+						asset.pop('url', None)
+						asset.pop('created_at', None)
+						asset.pop('label', None)
+						asset.pop('state', None)
+
 			software_item["github_content"] = json_data
 			software_item["downloads"] = get_downloads(software_item, json_data)
 
@@ -66,8 +93,8 @@ def make_repo():
 		if os.path.isfile(new_repo):
 			shutil.move(new_repo, old_repo)
 
-		# #Print the new data
-		# print(json.dumps(new_dict, indent=4))
+		#Print the new data
+		print(json.dumps(new_dict, indent=4))
 
 		with open(REPOFILENAME, 'w+') as outfile:
 			json.dump(new_dict, outfile, indent=4)
