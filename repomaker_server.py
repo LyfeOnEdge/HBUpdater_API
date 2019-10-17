@@ -1,3 +1,5 @@
+import os
+
 if not os.path.isfile("log.txt"):
 	with open("log.txt", "w+") as log:
 		log.write("Made log at {}".format(datetime.date.today()))
@@ -8,7 +10,7 @@ def write_out(line):
 	print(line)
 
 try:
-	import json, shutil, os, sys, requests
+	import json, shutil, sys, requests
 	from time import sleep
 	import datetime
 	import webhandler
