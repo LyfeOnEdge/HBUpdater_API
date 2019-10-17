@@ -165,7 +165,7 @@ try:
 		updated, updated_packages = make_repo()
 		if updated:
 			write_out("Data has changed.")
-			print(json.dumps(updated_packages, indent = 4))
+			write_out("Updated packages:\n{}".format(json.dumps(updated_packages, indent = 4)))
 			create_release(g, updated, updated_packages)
 		else:
 			write_out("No data has changed.")
