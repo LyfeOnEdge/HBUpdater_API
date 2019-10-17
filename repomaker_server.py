@@ -29,7 +29,7 @@ try:
 
 	repourl = "https://api.github.com/repos/LyfeOnEdge/HBUpdater_API"
 except Exception as e:
-	print(e)
+	write_out(e)
 
 def make_repo():
 	new_dict = {
@@ -46,7 +46,7 @@ def make_repo():
 		for software_item in new_dict[genre]:
 			updatefile = webhandler.getJson(software_item["name"], software_item["githubapi"])
 			if not updatefile:
-				sys.exit("ERROR BUILDING REPO FILE: Failed to get json for {}".format(software_item["name"]))
+				raise ("ERROR BUILDING REPO FILE: Failed to get json for {}".format(software_item["name"]))
 			with open(updatefile, encoding = "utf-8") as update_file_object:
 				json_data = json.load(update_file_object)
 			software_item["github_content"] = json_data
