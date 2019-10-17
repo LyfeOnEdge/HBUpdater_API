@@ -41,3 +41,4 @@ Any tool that interacts with the api should be able to grab a github release. Th
 ##### Want to contribute? Have ideas? Questions? Great!
 You can find me here: 
 **[4TU/Switchbru](https://discord.gg/uAfu6yM)**
+
