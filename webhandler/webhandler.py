@@ -10,6 +10,15 @@ filedict = {}
 if not os.path.isdir("downloads"):
 	os.mkdir("downloads")
 
+def wait_for_connection():
+	while True:
+		try:
+			downloadedfile, headers = urllib.request.urlretrieve("google.com")
+			return
+		except:
+			print("waiting for internet connection...")
+			pass
+
 def start(header):
 	opener = urllib.request.build_opener()
 	opener.addheaders = [header, ('User-agent', 'Mozilla/5.0')]

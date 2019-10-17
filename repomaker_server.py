@@ -6,7 +6,7 @@ if not os.path.isfile("log.txt"):
 
 def write_out(line):
 	with open("log.txt", "a+") as log:
-		log.write(line)
+		log.write("{}\n".format(line))
 	print(line)
 
 try:
@@ -46,7 +46,8 @@ def make_repo():
 		for software_item in new_dict[genre]:
 			updatefile = webhandler.getJson(software_item["name"], software_item["githubapi"])
 			if not updatefile:
-				raise ("ERROR BUILDING REPO FILE: Failed to get json for {}".format(software_item["name"]))
+				write_out("ERROR BUILDING REPO FILE: Failed to get json for {}".format(software_item["name"]))
+				
 			with open(updatefile, encoding = "utf-8") as update_file_object:
 				json_data = json.load(update_file_object)
 			software_item["github_content"] = json_data
@@ -119,6 +120,7 @@ def create_release(g_obj, file):
 	write_out("uploaded repo file sucessfully")
 
 try:
+	webhandler.wait_for_connection()
 	with open(OAUTHFILE) as f:
 		oauth_token = f.read()
 		g = Github(oauth_token)
