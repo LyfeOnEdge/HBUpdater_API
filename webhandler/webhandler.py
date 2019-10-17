@@ -1,6 +1,6 @@
 import os, sys, shutil
 from .etags import accessETaggedFile
-
+from time import sleep
 #web handling
 import urllib.request 
 
@@ -13,10 +13,11 @@ if not os.path.isdir("downloads"):
 def wait_for_connection():
 	while True:
 		try:
-			downloadedfile, headers = urllib.request.urlretrieve("google.com")
+			downloadedfile, headers = urllib.request.urlretrieve("http://www.google.com")
 			return
 		except:
 			print("waiting for internet connection...")
+			sleep(1)
 			pass
 
 def start(header):
