@@ -50,6 +50,7 @@ def make_repo():
 	for genre in new_dict.keys():
 		for software_item in new_dict[genre]:
 			updatefile = None
+			attempt = 0
 			while not updatefile and attempt < JSON_RETRIES:
 				updatefile, status = webhandler.getupdatedJson(software_item["name"], software_item["githubapi"])
 				attempt += 1
