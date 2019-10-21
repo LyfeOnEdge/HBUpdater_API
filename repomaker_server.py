@@ -49,9 +49,10 @@ def make_repo():
 	updated_packages = []
 	for genre in new_dict.keys():
 		for software_item in new_dict[genre]:
-
+			updatefile = None
 			while not updatefile and attempt < JSON_RETRIES:
 				updatefile, status = webhandler.getupdatedJson(software_item["name"], software_item["githubapi"])
+				attempt += 1
 			if not updatefile:
 				write_out("ERROR BUILDING REPO FILE: Failed to get json for {}".format(software_item["name"]))
 				return None, None
