@@ -1,5 +1,9 @@
 import os, datetime
 
+#--------------------------------------------------------------
+JSON_RETRIES = 5
+#--------------------------------------------------------------
+
 if not os.path.isfile("log.txt"):
 	with open("log.txt", "w+") as log:
 		log.write("Made log at {}\n".format(datetime.date.today()))
@@ -45,9 +49,12 @@ def make_repo():
 	updated_packages = []
 	for genre in new_dict.keys():
 		for software_item in new_dict[genre]:
-			updatefile, status = webhandler.getupdatedJson(software_item["name"], software_item["githubapi"])
+
+			while not updatefile and attempt < JSON_RETRIES:
+				updatefile, status = webhandler.getupdatedJson(software_item["name"], software_item["githubapi"])
 			if not updatefile:
 				write_out("ERROR BUILDING REPO FILE: Failed to get json for {}".format(software_item["name"]))
+				return None, None
 			if status:
 				updated_packages.append(software_item["name"])
 				
