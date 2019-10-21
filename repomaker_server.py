@@ -52,8 +52,9 @@ def make_repo():
 			updatefile = None
 			attempt = 0
 			while not updatefile and attempt < JSON_RETRIES:
-				updatefile, status = webhandler.getupdatedJson(software_item["name"], software_item["githubapi"])
 				attempt += 1
+				write_out("Downloading package {}, attempt {}".format(software_item["name"], attempt))
+				updatefile, status = webhandler.getupdatedJson(software_item["name"], software_item["githubapi"])
 			if not updatefile:
 				write_out("ERROR BUILDING REPO FILE: Failed to get json for {}".format(software_item["name"]))
 				return None, None
