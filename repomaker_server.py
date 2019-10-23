@@ -158,7 +158,6 @@ def create_release(g_obj, file, updated_pkgs):
 	write_out("Release created sucessfully")
 	release.upload_asset(file)
 	write_out("uploaded repo file sucessfully")
-
 try:
 	webhandler.wait_for_connection()
 	with open(OAUTHFILE) as f:
@@ -176,7 +175,10 @@ try:
 		if updated:
 			write_out("Data has changed.")
 			write_out("Updated packages:\n{}".format(json.dumps(updated_packages, indent = 4)))
-			create_release(g, updated, updated_packages)
+			try:
+				create_release(g, updated, updated_packages)
+			except Exception as e:
+				write_out("Error making release ~ {}".format(str(e)))
 		else:
 			write_out("No data has changed.")
 		write_out("Sleeping {} minutes".format(SLEEP_INTERVAL))
