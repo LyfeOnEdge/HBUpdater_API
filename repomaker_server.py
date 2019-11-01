@@ -170,10 +170,11 @@ def create_arg_parser():
 	return parser
 
 def get_packages(path):
+	ignore = [".git", ".gitattributes"]
     if os.path.isdir(path):
         packages_dir_items = os.listdir(path)
         for pkg in packages_dir_items:
-        	if os.path.isdir(os.path.join(input_folder, pkg)):
+        	if os.path.isdir(os.path.join(input_folder, pkg)) and not pkg in ignore:
         		yield pkg
 
 
