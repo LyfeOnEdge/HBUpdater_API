@@ -29,13 +29,13 @@ Any tool that interacts with the api should be able to grab a github release. Th
 ## repo distribution
   When each entry has had an updated json object appended the whole object is organized into a json object and dumped. If any content in the json has changed it gets pushed as a new release to github, with the tag name incrementing by one.
 
-  The receiving app (LyfeOnEdge/HBUpdaterGUI) grabs the repo file by getting the github api releases json at https://api.github.com/repos/LyfeOnEdge/HBUpdater_API/releases, which contains a link to the latest release of the HBUpdater_API repo.
+  The receiving app (LyfeOnEdge/HBUpdaterGUI) grabs the repo file by getting the github api releases json at `https://api.github.com/repos/LyfeOnEdge/HBUpdater_API/releases`, which contains a link to the latest release of the HBUpdater_API repo.
 
 ## repo parsing
-  The receiving app (LyfeOnEdge/HBUpdaterGUI) parses the json into dict-mapped lists, with parser.all containing all categories except those that have been specified as blacklisted. Each category is displayed on a page in the app.
+  The receiving app (LyfeOnEdge/HBUpdaterGUI) parses the json and displays the content for download.
 
 ## package management
-  HBUpdater uses a heavily modified python rewrite of vgmoose's [libget](https://github.com/vgmoose/libget)
+  HBUpdater uses a heavily modified python rewrite of vgmoose's [libget](https://github.com/vgmoose/libget) but uses github as a backend instead of the 4TU server
   It should be compatible with vgmooses [Homebrew Appstore](https://github.com/vgmoose/hb-appstore), except packages not also offered by the appstore will not show up in vgmoose's appstore.
 
 ##### Want to contribute? Have ideas? Questions? Great!
