@@ -1,5 +1,8 @@
 import os, sys, subprocess, argparse, json, shutil, datetime
 from zipfile import ZipFile
+from apscheduler.schedulers.blocking import BlockingScheduler
+
+sched = BlockingScheduler()
 
 #--------------------------------------------------------------
 JSON_RETRIES = 5
@@ -160,9 +163,6 @@ def create_release(g_obj, file, updated_pkgs):
 	release.upload_asset(file)
 	write_out("uploaded repo file sucessfully")
 
-
-
-
 def create_arg_parser():
 	parser = argparse.ArgumentParser(description='pass path to repository folder')
 	parser.add_argument('input',
@@ -178,14 +178,14 @@ def get_packages(path):
 				yield pkg
 
 
-try:
-	webhandler.wait_for_connection()
 
+if __name__ == "__main__":
 	with open(OAUTHFILE) as f:
 		oauth_token = f.read()
-		g = Github(oauth_token)
-
+		
 	if oauth_token:
+		write_out("Found github oauth token")
+		g = Github(oauth_token)
 		webhandler.start(['Authorization', 'token %s' % oauth_token])
 	else:
 		sys.exit("No token")
@@ -193,25 +193,27 @@ try:
 	arg_parser = create_arg_parser()
 	parsed_args = arg_parser.parse_args(sys.argv[1:])
 	input_folder = parsed_args.input
+	webhandler.wait_for_connection()
 
-	while True:
+	@sched.scheduled_job('interval', minutes=SLEEP_INTERVAL)
+	def MAIN():
 		try:
-			write_out("Making repo at {}".format(datetime.datetime.now()))
-		
-			updated, updated_packages = make_repo(input_folder)
-			if updated:
-				write_out("Data has changed.")
-				write_out("Updated packages:\n{}".format(json.dumps(updated_packages, indent = 4)))
-				try:
-					create_release(g, updated, updated_packages)
-				except Exception as e:
-					write_out("Error making release ~ {}".format(str(e)))
-			else:
-				write_out("No data has changed.")
+			try:
+				write_out("Making repo at {}".format(datetime.datetime.now()))
+				updated, updated_packages = make_repo(input_folder)
+				if updated:
+					write_out("Data has changed.\nUpdated packages:\n{}".format(json.dumps(updated_packages, indent = 4)))
+					try:
+						create_release(g, updated, updated_packages)
+					except Exception as e:
+						write_out("Error making release ~ {}".format(str(e)))
+				else:
+					write_out("No data has changed.")
+			except Exception as e:
+				write_out("Error building repo ~ {}".format(e))	
 		except Exception as e:
-			write_out("Error building repo ~ {}".format(e))
-
+			write_out(str(e))
 		write_out("Sleeping {} minutes".format(SLEEP_INTERVAL))
-		sleep(60*SLEEP_INTERVAL)
-except Exception as e:
-	write_out(str(e))
+
+	MAIN()
+	sched.start()
