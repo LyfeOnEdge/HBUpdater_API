@@ -177,8 +177,6 @@ def get_packages(path):
 			if os.path.isdir(os.path.join(input_folder, pkg)) and not pkg in ignore:
 				yield pkg
 
-
-
 if __name__ == "__main__":
 	with open(OAUTHFILE) as f:
 		oauth_token = f.read()
